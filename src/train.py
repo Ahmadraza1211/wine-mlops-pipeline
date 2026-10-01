@@ -27,7 +27,6 @@ RANDOM_STATE = 43
 
 
 
-
 def evaluate_cross_validation(model_class, params, X_train, y_train, n_splits=5):
     """
     Performs 5-fold Stratified Cross-Validation and returns average train & val metrics.
