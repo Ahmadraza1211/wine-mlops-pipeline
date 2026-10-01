@@ -20,9 +20,11 @@ except ImportError:
     from data import get_train_test_data
 
 
+
 EXPERIMENT_NAME = "Realwine-Cultivar-Classification"
 REGISTERED_MODEL_NAME = "RealwineWineClassifier"
 RANDOM_STATE = 43
+
 
 
 
