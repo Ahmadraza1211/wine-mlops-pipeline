@@ -1,0 +1,28 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# ignore mlflow  tracking and artifacts
+mlruns/
+mlruns.db
+mlflow.db
+.mlflow/
+
+# Pytest and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary data and local artifacts
+artifacts/
+*.log
+.DS_Store
+Thumbs.db
