@@ -21,7 +21,7 @@ except ImportError:
 
 EXPERIMENT_NAME = "Wine-Cultivar-Classification"
 REGISTERED_MODEL_NAME = "WineClassifier"
-RANDOM_STATE = 42
+RANDOM_STATE = 99
 
 
 def evaluate_cross_validation(model_class, params, X_train, y_train, n_splits=5):
