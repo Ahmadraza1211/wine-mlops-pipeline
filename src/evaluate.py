@@ -25,20 +25,43 @@ def load_champion_model():
     tracking_uri = os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db")
     mlflow.set_tracking_uri(tracking_uri)
 
+    # 1. Try loading via Model Registry alias '@champion'
     try:
         model_uri = f"models:/{REGISTERED_MODEL_NAME}@champion"
         return mlflow.sklearn.load_model(model_uri)
     except Exception:
-        # Fallback: load best run directly if registry alias is not resolved locally
+        pass
+
+    # 2. Try loading latest registered model version
+    try:
+        client = MlflowClient()
+        versions = client.get_latest_versions(REGISTERED_MODEL_NAME)
+        if versions:
+            latest_v = versions[0].version
+            return mlflow.sklearn.load_model(f"models:/{REGISTERED_MODEL_NAME}/{latest_v}")
+    except Exception:
+        pass
+
+    # 3. Fallback: load best run directly from experiment
+    try:
         client = MlflowClient()
         exp = client.get_experiment_by_name(EXPERIMENT_NAME)
-        runs = client.search_runs(
-            experiment_ids=[exp.experiment_id],
-            order_by=["metrics.val_macro_f1 DESC"],
-            max_results=1
-        )
-        best_run_id = runs[0].info.run_id
-        return mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")
+        if exp:
+            runs = client.search_runs(
+                experiment_ids=[exp.experiment_id],
+                order_by=["metrics.val_macro_f1 DESC"],
+                max_results=1
+            )
+            if runs:
+                best_run_id = runs[0].info.run_id
+                return mlflow.sklearn.load_model(f"runs:/{best_run_id}/model")
+    except Exception:
+        pass
+
+    raise RuntimeError(
+        f"Champion model '{REGISTERED_MODEL_NAME}' not found. "
+        "Please run 'python src/train.py' first."
+    )
 
 
 def evaluate_test_set():
