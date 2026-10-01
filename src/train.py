@@ -19,9 +19,11 @@ try:
 except ImportError:
     from data import get_train_test_data
 
-EXPERIMENT_NAME = "Coke-Cultivar-Classification"
-REGISTERED_MODEL_NAME = "CokeClassifier"
-RANDOM_STATE = 120
+
+EXPERIMENT_NAME = "Realwine-Cultivar-Classification"
+REGISTERED_MODEL_NAME = "RealwineWineClassifier"
+RANDOM_STATE = 43
+
 
 
 def evaluate_cross_validation(model_class, params, X_train, y_train, n_splits=5):
